@@ -92,12 +92,38 @@
     "dependencies": [],
     "defaultOrder": 50,
     "defaultEnabled": true,
-    "defaultOptions": {},
+    "defaultOptions": {
+      "folderDefaultState": "collapsed",
+      "folderClickBehavior": "link",
+      "useSavedState": true
+    },
     "components": {
       "Explorer": {
         "displayName": "Explorer",
         "defaultPosition": "left",
         "defaultPriority": 50
+      }
+    },
+    "optionSchema": {
+      "title": {
+        "type": "string"
+      },
+      "folderDefaultState": {
+        "type": "enum",
+        "values": [
+          "collapsed",
+          "open"
+        ]
+      },
+      "folderClickBehavior": {
+        "type": "enum",
+        "values": [
+          "collapse",
+          "link"
+        ]
+      },
+      "useSavedState": {
+        "type": "boolean"
       }
     }
   },
