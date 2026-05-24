@@ -149,6 +149,7 @@ var Explorer_default = ((userOpts) => {
               class: "explorer-toggle mobile-explorer hide-until-loaded",
               "data-mobile": true,
               "aria-controls": id,
+              "aria-label": i18n(cfg?.locale ?? "en-US").components.explorer.title,
               children: /* @__PURE__ */ u2(
                 "svg",
                 {
