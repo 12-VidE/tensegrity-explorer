@@ -77,9 +77,299 @@ var en_US_default = {
   }
 };
 
+// src/i18n/locales/en-GB.ts
+var en_GB_default = {
+  components: {
+    explorer: {
+      title: "Explorer"
+    }
+  }
+};
+
+// src/i18n/locales/ar-SA.ts
+var ar_SA_default = {
+  components: {
+    explorer: {
+      title: "\u0627\u0644\u0645\u0633\u062A\u0639\u0631\u0636"
+    }
+  }
+};
+
+// src/i18n/locales/ca-ES.ts
+var ca_ES_default = {
+  components: {
+    explorer: {
+      title: "Explorador"
+    }
+  }
+};
+
+// src/i18n/locales/cs-CZ.ts
+var cs_CZ_default = {
+  components: {
+    explorer: {
+      title: "Proch\xE1zet"
+    }
+  }
+};
+
+// src/i18n/locales/de-DE.ts
+var de_DE_default = {
+  components: {
+    explorer: {
+      title: "Explorer"
+    }
+  }
+};
+
+// src/i18n/locales/es-ES.ts
+var es_ES_default = {
+  components: {
+    explorer: {
+      title: "Explorador"
+    }
+  }
+};
+
+// src/i18n/locales/fa-IR.ts
+var fa_IR_default = {
+  components: {
+    explorer: {
+      title: "\u0645\u0637\u0627\u0644\u0628"
+    }
+  }
+};
+
+// src/i18n/locales/fi-FI.ts
+var fi_FI_default = {
+  components: {
+    explorer: {
+      title: "Selain"
+    }
+  }
+};
+
+// src/i18n/locales/fr-FR.ts
+var fr_FR_default = {
+  components: {
+    explorer: {
+      title: "Explorateur"
+    }
+  }
+};
+
+// src/i18n/locales/he-IL.ts
+var he_IL_default = {
+  components: {
+    explorer: {
+      title: "\u05E1\u05D9\u05D9\u05E8"
+    }
+  }
+};
+
+// src/i18n/locales/hu-HU.ts
+var hu_HU_default = {
+  components: {
+    explorer: {
+      title: "F\xE1jlb\xF6ng\xE9sz\u0151"
+    }
+  }
+};
+
+// src/i18n/locales/id-ID.ts
+var id_ID_default = {
+  components: {
+    explorer: {
+      title: "Penjelajah"
+    }
+  }
+};
+
+// src/i18n/locales/it-IT.ts
+var it_IT_default = {
+  components: {
+    explorer: {
+      title: "Esplora"
+    }
+  }
+};
+
+// src/i18n/locales/ja-JP.ts
+var ja_JP_default = {
+  components: {
+    explorer: {
+      title: "\u30A8\u30AF\u30B9\u30D7\u30ED\u30FC\u30E9\u30FC"
+    }
+  }
+};
+
+// src/i18n/locales/kk-KZ.ts
+var kk_KZ_default = {
+  components: {
+    explorer: {
+      title: "\u0417\u0435\u0440\u0442\u0442\u0435\u0443\u0448\u0456"
+    }
+  }
+};
+
+// src/i18n/locales/ko-KR.ts
+var ko_KR_default = {
+  components: {
+    explorer: {
+      title: "\uD0D0\uC0C9\uAE30"
+    }
+  }
+};
+
+// src/i18n/locales/lt-LT.ts
+var lt_LT_default = {
+  components: {
+    explorer: {
+      title: "Nar\u0161ykl\u0117"
+    }
+  }
+};
+
+// src/i18n/locales/nb-NO.ts
+var nb_NO_default = {
+  components: {
+    explorer: {
+      title: "Utforsker"
+    }
+  }
+};
+
+// src/i18n/locales/nl-NL.ts
+var nl_NL_default = {
+  components: {
+    explorer: {
+      title: "Verkenner"
+    }
+  }
+};
+
+// src/i18n/locales/pl-PL.ts
+var pl_PL_default = {
+  components: {
+    explorer: {
+      title: "Przegl\u0105daj"
+    }
+  }
+};
+
+// src/i18n/locales/pt-BR.ts
+var pt_BR_default = {
+  components: {
+    explorer: {
+      title: "Explorador"
+    }
+  }
+};
+
+// src/i18n/locales/ro-RO.ts
+var ro_RO_default = {
+  components: {
+    explorer: {
+      title: "Explorator"
+    }
+  }
+};
+
+// src/i18n/locales/ru-RU.ts
+var ru_RU_default = {
+  components: {
+    explorer: {
+      title: "\u041F\u0440\u043E\u0432\u043E\u0434\u043D\u0438\u043A"
+    }
+  }
+};
+
+// src/i18n/locales/th-TH.ts
+var th_TH_default = {
+  components: {
+    explorer: {
+      title: "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23\u0E2B\u0E19\u0E49\u0E32"
+    }
+  }
+};
+
+// src/i18n/locales/tr-TR.ts
+var tr_TR_default = {
+  components: {
+    explorer: {
+      title: "Gezgin"
+    }
+  }
+};
+
+// src/i18n/locales/uk-UA.ts
+var uk_UA_default = {
+  components: {
+    explorer: {
+      title: "\u041F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A"
+    }
+  }
+};
+
+// src/i18n/locales/vi-VN.ts
+var vi_VN_default = {
+  components: {
+    explorer: {
+      title: "N\u1ED9i dung"
+    }
+  }
+};
+
+// src/i18n/locales/zh-CN.ts
+var zh_CN_default = {
+  components: {
+    explorer: {
+      title: "\u63A2\u7D22"
+    }
+  }
+};
+
+// src/i18n/locales/zh-TW.ts
+var zh_TW_default = {
+  components: {
+    explorer: {
+      title: "\u63A2\u7D22"
+    }
+  }
+};
+
 // src/i18n/index.ts
 var locales = {
-  "en-US": en_US_default
+  "en-US": en_US_default,
+  "en-GB": en_GB_default,
+  "ar-SA": ar_SA_default,
+  "ca-ES": ca_ES_default,
+  "cs-CZ": cs_CZ_default,
+  "de-DE": de_DE_default,
+  "es-ES": es_ES_default,
+  "fa-IR": fa_IR_default,
+  "fi-FI": fi_FI_default,
+  "fr-FR": fr_FR_default,
+  "he-IL": he_IL_default,
+  "hu-HU": hu_HU_default,
+  "id-ID": id_ID_default,
+  "it-IT": it_IT_default,
+  "ja-JP": ja_JP_default,
+  "kk-KZ": kk_KZ_default,
+  "ko-KR": ko_KR_default,
+  "lt-LT": lt_LT_default,
+  "nb-NO": nb_NO_default,
+  "nl-NL": nl_NL_default,
+  "pl-PL": pl_PL_default,
+  "pt-BR": pt_BR_default,
+  "ro-RO": ro_RO_default,
+  "ru-RU": ru_RU_default,
+  "th-TH": th_TH_default,
+  "tr-TR": tr_TR_default,
+  "uk-UA": uk_UA_default,
+  "vi-VN": vi_VN_default,
+  "zh-CN": zh_CN_default,
+  "zh-TW": zh_TW_default
 };
 function i18n(locale) {
   return locales[locale] || en_US_default;
