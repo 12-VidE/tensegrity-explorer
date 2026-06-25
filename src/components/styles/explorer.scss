@@ -1,3 +1,182 @@
+/* "Open Explorer" Button */
+/* DO NOT TOUCH -> It strictly follows standard configuration */
+.explorer-button {
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  background: none;
+  border: none;
+  width: 20px;
+  height: 32px;
+  margin: 0;
+  text-align: inherit;
+  flex-shrink: 0;
+
+  & svg {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: calc(50% - 10px);
+    fill: var(--darkgray);
+    stroke: var(--darkgray);
+    transition: opacity 0.1s ease;
+  }
+}
+:root[reader-mode="on"] {
+  & .sidebar.left,
+  & .sidebar.right {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+
+/* Base Buttons & Structural Resets */
+.explorer-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--dark);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Full-Screen Window */
+.explorer-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh; /* dvh accounts for mobile browser UI bars */
+  background: var(--light);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 15vw; /* Adds breathable margins to the sides on desktop */
+  box-sizing: border-box;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* Strip away previous modal aesthetics */
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Mobile Adjustments */
+@media all and (max-width: 800px) {
+  .explorer-content {
+    padding: 1.5rem; /* Reduces side margins for smaller screens */
+  }
+}
+
+/* Header & Close Button */
+.explorer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--lightgray);
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-family: var(--headerFont);
+  }
+}
+
+/* Collapsed State (Hiding the Full-Screen Menu) */
+.explorer.collapsed .explorer-container {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px); /* Maintains a subtle slide-in effect */
+  pointer-events: none;
+}
+
+/* Tree Content Styling */
+.explorer-ul {
+  overflow-y: auto;
+  flex: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overscroll-behavior: contain;
+}
+
+.explorer-container ul { list-style: none; margin: 0; padding: 0; }
+.explorer-container ul li > a {
+  color: var(--dark);
+  opacity: 0.75;
+  text-decoration: none;
+  display: block;
+  padding: 0.2rem 0;
+}
+.explorer-container ul li > a:hover { color: var(--tertiary); opacity: 1; }
+.explorer-container ul li > a.active { opacity: 1; color: var(--tertiary); font-weight: 600; }
+
+.folder-outer {
+  visibility: collapse;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all 0.3s ease-in-out;
+  &.open {
+    visibility: visible;
+    grid-template-rows: 1fr;
+  }
+  > ul {
+    overflow: hidden;
+    margin-left: 6px;
+    padding-left: 0.8rem;
+    border-left: 1px solid var(--lightgray);
+  }
+}
+
+.folder-container {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  margin-top: 0.4rem;
+
+  div > button, div > a {
+    color: var(--secondary);
+    font-family: var(--headerFont);
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    &:hover { color: var(--tertiary); }
+  }
+}
+
+.folder-icon {
+  margin-right: 5px;
+  color: var(--secondary);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover { color: var(--tertiary); }
+}
+
+li:has(> .folder-outer:not(.open)) > .folder-container > svg {
+  transform: rotate(-90deg);
+}
+
+body:has(.explorer:not(.collapsed)) {
+  overflow: hidden; /* Prevent page scrolling while modal is open */
+}
+
+
+
+/*
 @media all and (max-width: 800px) {
   .page > #quartz-body > :not(.sidebar.left:has(.explorer)) {
     transition: transform 300ms ease-in-out;
@@ -236,3 +415,5 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     overscroll-behavior: contain;
   }
 }
+
+*/

@@ -304,23 +304,48 @@ async function handleNavOrRender(e) {
       // Always set up event listeners, regardless of render generation
       const cleanupHandlers = [];
 
-      const explorerButtons = explorer.getElementsByClassName("explorer-toggle");
-      for (const button of explorerButtons) {
-        const clickHandler = function () {
-          const nearestExplorer = this.closest(".explorer");
-          if (!nearestExplorer) return;
-          const explorerCollapsed = nearestExplorer.classList.toggle("collapsed");
-          nearestExplorer.setAttribute("aria-expanded", explorerCollapsed ? "false" : "true");
-
-          if (!explorerCollapsed) {
-            document.documentElement.classList.add("mobile-no-scroll");
-          } else {
-            document.documentElement.classList.remove("mobile-no-scroll");
-          }
+      // --- STRICT OPEN LOGIC ---
+      const openButtons = explorer.querySelectorAll(".explorer-open");
+      for (const btn of openButtons) {
+        const openHandler = function (evt) {
+          const nearest = evt.currentTarget.closest(".explorer");
+          if (!nearest) return;
+          nearest.classList.remove("collapsed");
+          nearest.setAttribute("aria-expanded", "true");
+          document.documentElement.classList.add("mobile-no-scroll");
         };
-        button.addEventListener("click", clickHandler);
-        cleanupHandlers.push(() => button.removeEventListener("click", clickHandler));
+        btn.addEventListener("click", openHandler);
+        cleanupHandlers.push(() => btn.removeEventListener("click", openHandler));
       }
+
+      // --- STRICT CLOSE LOGIC ---
+      const closeButtons = explorer.querySelectorAll(".explorer-close");
+      for (const btn of closeButtons) {
+        const closeHandler = function (evt) {
+          const nearest = evt.currentTarget.closest(".explorer");
+          if (!nearest) return;
+          nearest.classList.add("collapsed");
+          nearest.setAttribute("aria-expanded", "false");
+          document.documentElement.classList.remove("mobile-no-scroll");
+        };
+        btn.addEventListener("click", closeHandler);
+        cleanupHandlers.push(() => btn.removeEventListener("click", closeHandler));
+      }
+
+      // ---> NEW INJECTION STARTS HERE <---
+      // Close modal automatically when a file link is clicked
+      const linkClickHandler = function (evt) {
+        const target = evt.target.closest('a');
+        if (target && target.classList.contains('nav-file-title')) {
+          explorer.classList.add("collapsed");
+          explorer.setAttribute("aria-expanded", "false");
+          document.documentElement.classList.remove("mobile-no-scroll");
+        }
+      };
+      
+      explorerUl.addEventListener("click", linkClickHandler);
+      cleanupHandlers.push(() => explorerUl.removeEventListener("click", linkClickHandler));
+      // ---> NEW INJECTION ENDS HERE <---
 
       const folderIcons = explorer.getElementsByClassName("folder-icon");
       for (const icon of folderIcons) {
