@@ -86,7 +86,7 @@ export default ((userOpts?: Partial<ExplorerOptions>) => {
       >
         {/* "Open Explorer" Button  */}
         <button
-          class={classNames(displayClass, "explorer-button")}
+          class={classNames(displayClass, "explorer-open")}
           aria-controls={id}
           aria-label={title}
         >
@@ -117,26 +117,48 @@ export default ((userOpts?: Partial<ExplorerOptions>) => {
         <div id={id} class="explorer-container" aria-expanded={false} role="group">
           <div class="explorer-header">
             <h2>{title}</h2>
-            {/* The 'X' Close Button */}
-            <button type="button" class="explorer-close close-button">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                version="1.1"
-                class="readerIcon"
-                fill="currentColor"
-                stroke="currentColor"
-                stroke-width="0.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                width="64px"
-                height="64px"
-                viewBox="0 0 24 24"
-              >
-                <path d="M18 6 6 18"/>
-                <path d="m6 6 12 12"/>
-              </svg>
-            </button>
+            <div class="explorer-actions">
+              {/* Explorer Collapse Button */}
+                <button type="button" class="explorer-collapse-all" aria-label="Collapse all folders" title="Collapse All">
+                  <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  version="1.1"
+                  class="readerIcon"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="64px"
+                  height="64px"
+                  viewBox="0 0 24 24"
+                >
+                    <path d="m4 14 8-8 8 8"/>
+                    <path d="m4 21 8-8 8 8"/>
+                  </svg>
+                </button>
+              {/* Explorer Close Button */}
+              <button type="button" class="explorer-close close-button" aria-label="Close Explorer" title="Close Explorer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  version="1.1"
+                  class="readerIcon"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="64px"
+                  height="64px"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M18 6 6 18"/>
+                  <path d="m6 6 12 12"/>
+                </svg>
+              </button>
+            </div>
           </div>
           <OverflowList class="explorer-ul" />
         </div>
@@ -164,11 +186,9 @@ export default ((userOpts?: Partial<ExplorerOptions>) => {
               >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
-              <div>
-                <button class="folder-button">
-                  <span class="folder-title"></span>
-                </button>
-              </div>
+              <button class="folder-button">
+                <span class="folder-title"></span>
+              </button>
             </div>
             <div class="folder-outer">
               <ul class="content tree-item-children"></ul>

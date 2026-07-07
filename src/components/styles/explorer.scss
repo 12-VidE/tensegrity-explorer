@@ -1,6 +1,6 @@
 /* "Open Explorer" Button */
 /* DO NOT TOUCH -> It strictly follows standard configuration */
-.explorer-button {
+.explorer-open {
   cursor: pointer;
   padding: 0;
   position: relative;
@@ -34,19 +34,6 @@
   }
 }
 
-
-/* Base Buttons & Structural Resets */
-.explorer-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--dark);
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Full-Screen Window */
 .explorer-container {
   position: fixed;
@@ -64,34 +51,84 @@
   visibility: visible;
   transform: translateY(0);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  
-  /* Strip away previous modal aesthetics */
   border: none;
   border-radius: 0;
   box-shadow: none;
 }
-
-/* Mobile Adjustments */
 @media all and (max-width: 800px) {
   .explorer-content {
     padding: 1.5rem; /* Reduces side margins for smaller screens */
   }
 }
 
-/* Header & Close Button */
-.explorer-header {
+/* Header */
+.explorer-container .explorer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
   border-bottom: 1px solid var(--lightgray);
 
+  /* Title */ 
   h2 {
     margin: 0;
     font-size: 1.2rem;
     font-family: var(--headerFont);
   }
+
+  .explorer-actions {
+    display: flex;
+    gap: 1.2rem; /* Creates exact spacing between collapse and close */
+    align-items: center;
+    
+    /* Buttons inside header */
+    /* DO NOT TOUCH -> It strictly follows standard configuration (the one used also in main page) */
+    button {
+      cursor: pointer;
+      padding: 0;
+      position: relative;
+      background: none;
+      border: none;
+      width: 20px;
+      height: 32px;
+      margin: 0;
+      text-align: inherit;
+      flex-shrink: 0;
+      display: flex;
+
+      & svg {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: calc(50% - 10px);
+        fill: var(--darkgray);
+        stroke: var(--darkgray);
+        transition: opacity 0.1s ease;
+      }
+
+      /*
+      color: var(--dark);
+     
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      transition: opacity 0.2s ease, color 0.2s ease;
+      */
+
+      /* --- NEW: Hide the collapse button by default --- */
+      &.explorer-collapse-all {
+        display: none;
+      }
+    }
+  }
+
+  
+}
+
+/* --- NEW: Show it only when folders are open --- */
+/* Added .explorer-actions button to ensure it beats the hide rule */
+.explorer.has-open-folders .explorer-actions button.explorer-collapse-all {
+  display: flex;
 }
 
 /* Collapsed State (Hiding the Full-Screen Menu) */
@@ -146,7 +183,7 @@
   user-select: none;
   margin-top: 0.4rem;
 
-  div > button, div > a {
+  button, a {
     color: var(--secondary);
     font-family: var(--headerFont);
     font-weight: 600;

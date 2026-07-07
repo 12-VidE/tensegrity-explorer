@@ -253,6 +253,12 @@ async function handleNavOrRender(e) {
     }
 
     for (const explorer of allExplorers) {
+      // --- NEW: Helper to toggle the visibility of the Collapse All button ---
+      const updateCollapseVisibility = () => {
+        const hasOpen = explorer.querySelectorAll(".folder-outer.open").length > 0;
+        explorer.classList.toggle("has-open-folders", hasOpen);
+      };
+
       const explorerUl = explorer.querySelector(".explorer-ul");
       if (!explorerUl) {
         console.warn("[Explorer] No explorer-ul found");
@@ -283,6 +289,8 @@ async function handleNavOrRender(e) {
             renderTree(child, explorerUl, currentSlug, folderBehavior, savedState, "");
           }
           console.log("[Explorer] Render complete, final list length:", explorerUl.children.length);
+          // ADD HERE: Check state after initial render
+          updateCollapseVisibility();
         } else {
           console.warn("[Explorer] No trie or empty children");
         }
@@ -331,8 +339,6 @@ async function handleNavOrRender(e) {
         btn.addEventListener("click", closeHandler);
         cleanupHandlers.push(() => btn.removeEventListener("click", closeHandler));
       }
-
-      // ---> NEW INJECTION STARTS HERE <---
       // Close modal automatically when a file link is clicked
       const linkClickHandler = function (evt) {
         const target = evt.target.closest('a');
@@ -341,11 +347,47 @@ async function handleNavOrRender(e) {
           explorer.setAttribute("aria-expanded", "false");
           document.documentElement.classList.remove("mobile-no-scroll");
         }
-      };
-      
+      }
       explorerUl.addEventListener("click", linkClickHandler);
       cleanupHandlers.push(() => explorerUl.removeEventListener("click", linkClickHandler));
-      // ---> NEW INJECTION ENDS HERE <---
+
+      // --- COLLAPSE ALL LOGIC ---
+      const collapseButtons = explorer.querySelectorAll(".explorer-collapse-all");
+      for (const btn of collapseButtons) {
+        const collapseHandler = function (evt) {
+          evt.stopPropagation();
+          const nearest = evt.currentTarget.closest(".explorer");
+          if (!nearest) return;
+          // Find all currently open folders inside this modal
+          const openFolders = nearest.querySelectorAll(".folder-outer.open");
+          // Fetch current memory state to overwrite
+          let savedState = [];
+          try {
+            savedState = JSON.parse(localStorage.getItem("fileTree") || "[]");
+          } catch (e) {}
+          for (const folder of openFolders) {
+            // 1. Visually collapse it
+            folder.classList.remove("open");
+            // 2. Mathematically save the collapsed state to cache
+            const folderContainer = folder.previousElementSibling;
+            if (folderContainer && folderContainer.dataset.folderpath) {
+              const folderPath = folderContainer.dataset.folderpath;
+              const existingIndex = savedState.findIndex((item) => item.path === folderPath);
+              if (existingIndex >= 0) {
+                savedState[existingIndex].collapsed = true;
+              } else {
+                savedState.push({ path: folderPath, collapsed: true });
+              }
+            }
+          }
+          localStorage.setItem("fileTree", JSON.stringify(savedState));
+          // ADD HERE: Instantly hide button since everything just collapsed
+          updateCollapseVisibility();
+        };
+        btn.addEventListener("click", collapseHandler);
+        cleanupHandlers.push(() => btn.removeEventListener("click", collapseHandler));
+      }
+
 
       const folderIcons = explorer.getElementsByClassName("folder-icon");
       for (const icon of folderIcons) {
@@ -369,6 +411,8 @@ async function handleNavOrRender(e) {
             savedState.push({ path: folderPath, collapsed: isCollapsed });
           }
           localStorage.setItem("fileTree", JSON.stringify(savedState));
+          // ADD HERE: Re-evaluate visibility
+          updateCollapseVisibility();
         };
         icon.addEventListener("click", iconClickHandler);
         cleanupHandlers.push(() => icon.removeEventListener("click", iconClickHandler));
@@ -406,6 +450,8 @@ async function handleNavOrRender(e) {
               savedState.push({ path: folderPath, collapsed: isCollapsed });
             }
             localStorage.setItem("fileTree", JSON.stringify(savedState));
+            // ADD HERE: Re-evaluate visibility
+            updateCollapseVisibility();
           }
         };
         button.addEventListener("click", buttonClickHandler);
