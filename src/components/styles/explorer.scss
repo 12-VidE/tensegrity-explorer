@@ -1,4 +1,4 @@
-/* "Open Explorer" Button */
+/* --- "Open Explorer" Button --- */
 /* DO NOT TOUCH -> It strictly follows standard configuration */
 .explorer-open {
   cursor: pointer;
@@ -34,7 +34,9 @@
   }
 }
 
-/* Full-Screen Window */
+
+
+/* --- Full-Screen Window --- */
 .explorer-container {
   position: fixed;
   top: 0;
@@ -61,7 +63,9 @@
   }
 }
 
-/* Header */
+
+
+/* --- Header --- */
 .explorer-container .explorer-header {
   display: flex;
   justify-content: space-between;
@@ -120,7 +124,7 @@
   }
 }
 
-/* --- NEW: Reveal Blink Animation (for "reveal button") --- */
+/* "Reveal" button blink animation */
 @keyframes explorer-item-blink {
   0% { 
     background-color: transparent; 
@@ -140,13 +144,12 @@
   border-radius: 4px; /* Optional: smooths the edges of the background pulse */
 }
 
-/* 4. Force show the reveal button when the JS adds the .has-active-file class */
+/* Show "Reveal" button IFF  .has-active-file */
 .explorer.has-active-file .explorer-container .explorer-header .explorer-actions button.explorer-reveal {
   display: flex !important;
 }
 
-/* --- NEW: Show it only when folders are open --- */
-/* Added .explorer-actions button to ensure it beats the hide rule */
+/* Show "Collapse-all" button IFF .has-open-folders */
 .explorer.has-open-folders .explorer-actions button.explorer-collapse-all {
   display: flex;
 }
@@ -159,7 +162,9 @@
   pointer-events: none;
 }
 
-/* Tree Content Styling */
+
+
+/* --- Explorer Tree --- */
 .explorer-ul {
   overflow-y: auto;
   flex: 1;
@@ -169,16 +174,31 @@
   overscroll-behavior: contain;
 }
 
-.explorer-container ul { list-style: none; margin: 0; padding: 0; }
-.explorer-container ul li > a {
-  color: var(--dark);
-  opacity: 0.75;
-  text-decoration: none;
-  display: block;
-  padding: 0.2rem 0;
+.explorer-container ul { 
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    line-height: 1.3rem;
+    > a {
+      opacity: 0.75;
+      color: var(--dark);
+      text-decoration: none;
+      display: block;
+      padding: 0.2rem 0;
+    }
+    > a:hover { 
+      opacity: 1;
+      color: var(--tertiary);
+    }
+    > a.active {
+      opacity: 1;
+      color: var(--tertiary);
+      font-weight: 600;
+    }
+  }
 }
-.explorer-container ul li > a:hover { color: var(--tertiary); opacity: 1; }
-.explorer-container ul li > a.active { opacity: 1; color: var(--tertiary); font-weight: 600; }
 
 .folder-outer {
   visibility: collapse;
