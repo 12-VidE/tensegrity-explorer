@@ -76,14 +76,14 @@
     font-family: var(--headerFont);
   }
 
+  /* Custom Buttons */
   .explorer-actions {
     display: flex;
     gap: 1.2rem; /* Creates exact spacing between collapse and close */
     align-items: center;
     
-    /* Buttons inside header */
-    /* DO NOT TOUCH -> It strictly follows standard configuration (the one used also in main page) */
     button {
+      /* DO NOT TOUCH -> It strictly follows standard configuration (the one used also in main page) */
       cursor: pointer;
       padding: 0;
       position: relative;
@@ -96,6 +96,7 @@
       flex-shrink: 0;
       display: flex;
 
+      /* Icon */
       & svg {
         position: absolute;
         width: 20px;
@@ -106,23 +107,42 @@
         transition: opacity 0.1s ease;
       }
 
-      /*
-      color: var(--dark);
-     
-      align-items: center;
-      justify-content: center;
-      opacity: 0.6;
-      transition: opacity 0.2s ease, color 0.2s ease;
-      */
-
-      /* --- NEW: Hide the collapse button by default --- */
+      /* Collapse-all Button */
       &.explorer-collapse-all {
-        display: none;
+        display: none; /*Hidden by default*/
+      }
+
+      /* Reveal Button */
+      &.explorer-reveal {
+        display: none !important; /*Hidden by default*/
       }
     }
   }
+}
 
-  
+/* --- NEW: Reveal Blink Animation (for "reveal button") --- */
+@keyframes explorer-item-blink {
+  0% { 
+    background-color: transparent; 
+    padding-left: 0;
+  }
+  50% { 
+    background-color: var(--darkgray); 
+    padding-left: 0.5rem; /* Pushes the text to the right */
+  }
+  100% { 
+    background-color: transparent; 
+    padding-left: 0;
+  }
+}
+.explorer-blink {
+  animation: explorer-item-blink 1s ease-in-out 1;
+  border-radius: 4px; /* Optional: smooths the edges of the background pulse */
+}
+
+/* 4. Force show the reveal button when the JS adds the .has-active-file class */
+.explorer.has-active-file .explorer-container .explorer-header .explorer-actions button.explorer-reveal {
+  display: flex !important;
 }
 
 /* --- NEW: Show it only when folders are open --- */

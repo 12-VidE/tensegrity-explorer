@@ -253,11 +253,17 @@ async function handleNavOrRender(e) {
     }
 
     for (const explorer of allExplorers) {
-      // --- NEW: Helper to toggle the visibility of the Collapse All button ---
+      // Helper - Check IF any folder has been unfolded, toggling "Collapse All" button visibility
       const updateCollapseVisibility = () => {
         const hasOpen = explorer.querySelectorAll(".folder-outer.open").length > 0;
         explorer.classList.toggle("has-open-folders", hasOpen);
       };
+
+      // Helper - Check IF the current file exists in the generated tree, toggling "Reveal" button visibility
+      const updateActiveFile = () => {
+          const hasActiveFile = explorerUl.querySelector("a.active") !== null;
+          explorer.classList.toggle("has-active-file", hasActiveFile);
+      }
 
       const explorerUl = explorer.querySelector(".explorer-ul");
       if (!explorerUl) {
@@ -289,8 +295,10 @@ async function handleNavOrRender(e) {
             renderTree(child, explorerUl, currentSlug, folderBehavior, savedState, "");
           }
           console.log("[Explorer] Render complete, final list length:", explorerUl.children.length);
-          // ADD HERE: Check state after initial render
+          // Update explorer state AFTER initialization
           updateCollapseVisibility();
+          updateActiveFile();
+
         } else {
           console.warn("[Explorer] No trie or empty children");
         }
@@ -326,6 +334,7 @@ async function handleNavOrRender(e) {
         cleanupHandlers.push(() => btn.removeEventListener("click", openHandler));
       }
 
+
       // --- STRICT CLOSE LOGIC ---
       const closeButtons = explorer.querySelectorAll(".explorer-close");
       for (const btn of closeButtons) {
@@ -350,6 +359,7 @@ async function handleNavOrRender(e) {
       }
       explorerUl.addEventListener("click", linkClickHandler);
       cleanupHandlers.push(() => explorerUl.removeEventListener("click", linkClickHandler));
+
 
       // --- COLLAPSE ALL LOGIC ---
       const collapseButtons = explorer.querySelectorAll(".explorer-collapse-all");
@@ -389,6 +399,75 @@ async function handleNavOrRender(e) {
       }
 
 
+      // --- REVEAL CURRENT LOGIC ---
+      const revealButtons = explorer.querySelectorAll(".explorer-reveal");
+      for (const btn of revealButtons) {
+        const revealHandler = function (evt) {
+          evt.stopPropagation();
+          const nearest = evt.currentTarget.closest(".explorer");
+          if (!nearest) return;
+
+          // 1. Find the currently active file in the DOM
+          const activeElement = nearest.querySelector("a.active");
+          if (!activeElement) return;
+
+          // Fetch memory state to update
+          let savedState = [];
+          try {
+            savedState = JSON.parse(localStorage.getItem("fileTree") || "[]");
+          } catch (e) {}
+
+          // 2. Climb up the DOM tree and collect every parent folder
+          const foldersToOpen = [];
+          let currentFolder = activeElement.closest(".folder-outer");
+          while (currentFolder) {
+            foldersToOpen.push(currentFolder);
+            currentFolder = currentFolder.parentElement.closest(".folder-outer");
+          }
+
+          // Reverse the array to open from the Outer-most parent down to the Inner-most child.
+          // This allows the browser to calculate nested expanding heights smoothly.
+          foldersToOpen.reverse();
+
+          for (const folder of foldersToOpen) {
+            folder.classList.add("open");
+
+            // 3. Save the newly opened state to localStorage
+            const folderContainer = folder.previousElementSibling;
+            if (folderContainer && folderContainer.dataset.folderpath) {
+              const folderPath = folderContainer.dataset.folderpath;
+              const existingIndex = savedState.findIndex((item) => item.path === folderPath);
+              if (existingIndex >= 0) {
+                savedState[existingIndex].collapsed = false;
+              } else {
+                savedState.push({ path: folderPath, collapsed: false });
+              }
+            }
+          }
+
+          localStorage.setItem("fileTree", JSON.stringify(savedState));
+          updateCollapseVisibility();
+
+          // 4. Delay the scroll until AFTER the CSS folder expansion animation finishes (0.3s)
+          setTimeout(() => {
+            activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+            
+            // 5. Trigger the blink animation
+            activeElement.classList.remove("explorer-blink");
+            void activeElement.offsetWidth; // Force a DOM reflow to allow the animation to restart on rapid clicks
+            activeElement.classList.add("explorer-blink");
+            
+            // Safely clean up the class after the animation finishes (3 iterations * 0.5s = 1.5s)
+            setTimeout(() => activeElement.classList.remove("explorer-blink"), 1500);
+          }, 300);
+        };
+        
+        btn.addEventListener("click", revealHandler);
+        cleanupHandlers.push(() => btn.removeEventListener("click", revealHandler));
+      }
+
+
+      // --- FOLDER "COLLAPSE ICON" LOGIC ---
       const folderIcons = explorer.getElementsByClassName("folder-icon");
       for (const icon of folderIcons) {
         const iconClickHandler = function (evt) {
@@ -418,6 +497,8 @@ async function handleNavOrRender(e) {
         cleanupHandlers.push(() => icon.removeEventListener("click", iconClickHandler));
       }
 
+      
+      // --- FOLDER "NAME" LOGIC ---
       const folderButtons = explorer.getElementsByClassName("folder-button");
       for (const button of folderButtons) {
         const buttonClickHandler = function (evt) {
