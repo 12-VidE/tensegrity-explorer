@@ -185,18 +185,17 @@ function renderTree(node, container, currentSlug, folderBehavior, savedState, pa
     if (folderTitle) folderTitle.textContent = node.displayName || node.slugSegment;
     if (folderContainer) folderContainer.dataset.folderpath = node.slug;
 
-    if (folderBehavior === "link" && folderButton) {
+    // Only turn the name into a link if a folder note exists (node.data is present)
+    if (folderBehavior === "link" && folderTitle && node.data && folderButton) {
       const folderLink = document.createElement("a");
-      folderLink.className = folderButton.className;
+      // Keep existing title classes but append 'is-link' for styling
+      folderLink.className = (folderTitle.className || "") + " is-link";
       const folderHref = simplifySlug(node.slug);
       folderLink.href = resolveBasePath(folderHref || "");
-      if (folderTitle) {
-        folderLink.appendChild(folderTitle);
-      } else {
-        folderLink.textContent = node.displayName || node.slugSegment;
-      }
-      folderButton.replaceWith(folderLink);
-      folderButton = folderLink;
+      folderLink.textContent = node.displayName || node.slugSegment;
+      
+      // Replace only the title text with the link, leaving the row structure intact
+      folderTitle.replaceWith(folderLink);
     }
 
     // Check saved state for collapsed status
@@ -466,13 +465,16 @@ async function handleNavOrRender(e) {
         cleanupHandlers.push(() => btn.removeEventListener("click", revealHandler));
       }
 
+      // --- FOLDER ROW LOGIC ---
+      const folderContainers = explorer.getElementsByClassName("folder-container");
+      for (const container of folderContainers) {
+        const containerClickHandler = function (evt) {
+          // IF clicking a link: follow it, do nothign else
+          if (evt.target.closest("a")) return;
 
-      // --- FOLDER "COLLAPSE ICON" LOGIC ---
-      const folderIcons = explorer.getElementsByClassName("folder-icon");
-      for (const icon of folderIcons) {
-        const iconClickHandler = function (evt) {
+          // ELSE (click icon, empty space, other text): toggle folder
           evt.stopPropagation();
-          const folderContainer = this.parentElement;
+          const folderContainer = this;
           if (!folderContainer) return;
           const childFolderContainer = folderContainer.nextElementSibling;
           if (!childFolderContainer) return;
@@ -493,50 +495,8 @@ async function handleNavOrRender(e) {
           // ADD HERE: Re-evaluate visibility
           updateCollapseVisibility();
         };
-        icon.addEventListener("click", iconClickHandler);
-        cleanupHandlers.push(() => icon.removeEventListener("click", iconClickHandler));
-      }
-
-      
-      // --- FOLDER "NAME" LOGIC ---
-      const folderButtons = explorer.getElementsByClassName("folder-button");
-      for (const button of folderButtons) {
-        const buttonClickHandler = function (evt) {
-          const folderContainer = this.closest(".folder-container");
-          if (!folderContainer) return;
-
-          const folderBehavior = explorer.dataset.behavior || "collapse";
-          const childFolderContainer = folderContainer.nextElementSibling;
-          const folderPath = folderContainer.dataset.folderpath;
-
-          if (folderBehavior === "link") {
-            // When folderBehavior is "link", the <button> has been replaced with an <a> tag
-            // that has the correct absolute href (e.g. "/features/"). Let the <a> tag's
-            // native click propagate to the SPA router — don't navigate imperatively here,
-            // as that would use a relative URL and break SPA navigation.
-            return;
-          } else {
-            evt.stopPropagation();
-            if (!childFolderContainer) return;
-
-            childFolderContainer.classList.toggle("open");
-            const isCollapsed = !childFolderContainer.classList.contains("open");
-
-            const savedState = JSON.parse(localStorage.getItem("fileTree") || "[]");
-            const existingIndex = savedState.findIndex((item) => item.path === folderPath);
-
-            if (existingIndex >= 0) {
-              savedState[existingIndex].collapsed = isCollapsed;
-            } else {
-              savedState.push({ path: folderPath, collapsed: isCollapsed });
-            }
-            localStorage.setItem("fileTree", JSON.stringify(savedState));
-            // ADD HERE: Re-evaluate visibility
-            updateCollapseVisibility();
-          }
-        };
-        button.addEventListener("click", buttonClickHandler);
-        cleanupHandlers.push(() => button.removeEventListener("click", buttonClickHandler));
+        container.addEventListener("click", containerClickHandler);
+        cleanupHandlers.push(() => container.removeEventListener("click", containerClickHandler));
       }
 
       if (typeof window !== "undefined" && window.addCleanup) {

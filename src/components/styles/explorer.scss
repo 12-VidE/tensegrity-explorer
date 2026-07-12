@@ -181,21 +181,64 @@
 
   li {
     line-height: 1.3rem;
+
     > a {
-      opacity: 0.75;
+      opacity: 0.65;
       color: var(--dark);
       text-decoration: none;
       display: block;
       padding: 0.2rem 0;
+
+      &:hover{
+        opacity: 1;
+        font-weight: 600;
+      }
+      &.active {
+        opacity: 1;
+        color: var(--tertiary);
+        font-weight: 600;
+      }
     }
-    > a:hover { 
-      opacity: 1;
-      color: var(--tertiary);
+
+    /* Highlight every line on hover */
+    > a.tree-item-self:hover, div.folder-container:hover{
+      border-radius: 5px;
+      background-color: color-mix(in srgb, var(--lightgray) 40%, transparent);
+      transition: background-color 0.2s ease-in-out;
+      cursor: default;
     }
-    > a.active {
-      opacity: 1;
-      color: var(--tertiary);
-      font-weight: 600;
+  }
+}
+
+.folder-container {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  margin-top: 0.4rem;
+  cursor: default;
+
+  button, a {
+    color: var(--secondary);
+    font-family: var(--headerFont);
+    font-weight: 600;
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+  }
+
+  .folder-icon {
+    margin-right: 5px;
+    color: var(--secondary);
+    transition: transform 0.3s ease;
+  }
+
+  .folder-title{
+    text-decoration: none;
+
+    &.is-link{
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
     }
   }
 }
@@ -217,32 +260,6 @@
   }
 }
 
-.folder-container {
-  display: flex;
-  align-items: center;
-  user-select: none;
-  margin-top: 0.4rem;
-
-  button, a {
-    color: var(--secondary);
-    font-family: var(--headerFont);
-    font-weight: 600;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    &:hover { color: var(--tertiary); }
-  }
-}
-
-.folder-icon {
-  margin-right: 5px;
-  color: var(--secondary);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  &:hover { color: var(--tertiary); }
-}
-
 li:has(> .folder-outer:not(.open)) > .folder-container > svg {
   transform: rotate(-90deg);
 }
@@ -250,8 +267,6 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
 body:has(.explorer:not(.collapsed)) {
   overflow: hidden; /* Prevent page scrolling while modal is open */
 }
-
-
 
 /*
 @media all and (max-width: 800px) {
