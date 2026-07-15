@@ -64,7 +64,7 @@ export default ((userOpts?: Partial<ExplorerOptions>) => {
   const opts: ExplorerOptions = { ...defaultOptions, ...userOpts };
   const { OverflowList, overflowListAfterDOMLoaded } = OverflowListFactory();
 
-  const ExplorerComponent: QuartzComponent = (props: QuartzComponentProps) => {
+  const TensegrityExplorerComponent: QuartzComponent = (props: QuartzComponentProps) => {
     const { cfg } = props;
     const displayClass = (props as { displayClass?: "mobile-only" | "desktop-only" }).displayClass;
     const id = `explorer-${numExplorers++}`;
@@ -224,7 +224,7 @@ export default ((userOpts?: Partial<ExplorerOptions>) => {
     );
   };
 
-  ExplorerComponent.css = style;
-  ExplorerComponent.afterDOMLoaded = concatenateResources(script, overflowListAfterDOMLoaded);
-  return ExplorerComponent;
+  TensegrityExplorerComponent.css = style;
+  TensegrityExplorerComponent.afterDOMLoaded = concatenateResources(script, overflowListAfterDOMLoaded);
+  return TensegrityExplorerComponent;
 }) satisfies QuartzComponentConstructor;

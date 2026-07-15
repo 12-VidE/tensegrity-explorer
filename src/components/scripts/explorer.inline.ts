@@ -175,6 +175,7 @@ function renderTree(node, container, currentSlug, folderBehavior, savedState, pa
   const simplifiedCurrentSlug = simplifySlug(currentSlug);
 
   if (node.isFolder) {
+    // IF working w/ folder
     const clone = folderTemplate.content.cloneNode(true);
     const folderContainer = clone.querySelector(".folder-container");
     let folderButton = clone.querySelector(".folder-button");
@@ -185,7 +186,7 @@ function renderTree(node, container, currentSlug, folderBehavior, savedState, pa
     if (folderTitle) folderTitle.textContent = node.displayName || node.slugSegment;
     if (folderContainer) folderContainer.dataset.folderpath = node.slug;
 
-    // Only turn the name into a link if a folder note exists (node.data is present)
+    // IF it has valid folder-note (node.data exists) -> Create link
     if (folderBehavior === "link" && folderTitle && node.data && folderButton) {
       const folderLink = document.createElement("a");
       // Keep existing title classes but append 'is-link' for styling
@@ -194,6 +195,11 @@ function renderTree(node, container, currentSlug, folderBehavior, savedState, pa
       folderLink.href = resolveBasePath(folderHref || "");
       folderLink.textContent = node.displayName || node.slugSegment;
       
+      // IF folder-note is open -> Flag it 
+      if (node.slug === currentSlug || folderHref === simplifiedCurrentSlug) {
+        folderLink.classList.add("active", "is-active");
+      }
+
       // Replace only the title text with the link, leaving the row structure intact
       folderTitle.replaceWith(folderLink);
     }
@@ -220,6 +226,7 @@ function renderTree(node, container, currentSlug, folderBehavior, savedState, pa
 
     container.appendChild(clone);
   } else if (node.data) {
+    // IF working w/ file
     const clone = fileTemplate.content.cloneNode(true);
     const link = clone.querySelector("a");
     if (link) {
